@@ -1,0 +1,8 @@
+{
+  "name": "Ant",
+  "summary": "把 ant 插件变成一个原子：跑 ant target，退出码即构建结果。",
+  "author": "hummerstudio",
+  "license": "MIT",
+  "tags": ["build-tool", "official-port"],
+  "homepage": "https://github.com/hummerstudio/jenkins-atom-ant"
+}
