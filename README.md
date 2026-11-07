@@ -16,16 +16,18 @@ The plugin variants each re-implement tool discovery, environment setup and resu
 is one file you can read in a minute, it appears in the atom center with a form, and a pipeline calls it with
 `runAtom(atom: 'ant', version: '1.0.0', inputs: [goals: 'clean build'])`.
 
-## Build and smoke test
+## Build and test
 
 ```bash
-./build.sh             # → dist/ant/{ant.jar,task.json}
-./tools/smoke.sh       # fake ant on PATH: arguments, workspace, exit code, tolerate mode, PATH fallback
+mvn verify             # → target/dist/ant/{ant.jar,task.json}
 ```
+
+`src/test/java/atom/AntIT.java` starts the packaged jar the way the runner does, against a fake `ant` on PATH: the
+arguments and the workspace the tool sees, a non-zero exit both failing and being tolerated, and the PATH fallback.
 
 ## Publish
 
 ```bash
-tools/publish-atom.sh --center <center-dir> --atom-dir dist/ant --version 1.0.0 \
+tools/publish-atom.sh --center <center-dir> --atom-dir target/dist/ant --version 1.0.0 \
     --key key.pem --key-id <keyId>     # tools/ 来自 jenkins-atom-plugin 仓库
 ```
