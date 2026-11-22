@@ -1,33 +1,18 @@
-# jenkins-atom-ant
+# Merged into `build-tool`
 
-The [ant](https://plugins.jenkins.io/ant/) plugin (≈200k installations) as an **atom**: one Java file,
-no plugin.
+这个原子已并入 [`build-tool`](https://github.com/hummerstudio/jenkins-atom-build-tool)：三个类原本只差三个常量
+（二进制名、`*_HOME`、默认 goals），差异现在是一个参数。
 
-Runs `ant <goals> <options>` in the job workspace and reports the exit code. The plugin's value was never the
-wrapping — it was the tool, the log streaming and the fail-on-error rule, all of which are a few lines here.
+原调用：
 
-* `goals` / `options` — `${ENV}` is expanded, so `-Dbuild=${BUILD_NUMBER}` works.
-* `home` — a `ant` install directory; empty means PATH, then `$ANT_HOME`.
-* `failOnError` — default on; off keeps the exit code as an output and lets the build continue.
-
-## Why an atom and not the plugin
-
-The plugin variants each re-implement tool discovery, environment setup and result mapping, and they drift. This atom
-is one file you can read in a minute, it appears in the atom center with a form, and a pipeline calls it with
-`runAtom(atom: 'ant', version: '1.0.0', inputs: [goals: 'clean build'])`.
-
-## Build and test
-
-```bash
-mvn verify             # → target/dist/ant/{ant.jar,task.json}
+```groovy
+runAtom(atom: 'ant', version: '1.latest', inputs: [...])
 ```
 
-`src/test/java/atom/AntIT.java` starts the packaged jar the way the runner does, against a fake `ant` on PATH: the
-arguments and the workspace the tool sees, a non-zero exit both failing and being tolerated, and the PATH fallback.
+现在的等价写法：
 
-## Publish
-
-```bash
-tools/publish-atom.sh --center <center-dir> --atom-dir target/dist/ant --version 1.0.0 \
-    --key key.pem --key-id <keyId>     # tools/ 来自 jenkins-atom-plugin 仓库
+```groovy
+runAtom(atom: 'build-tool', version: '1.latest', inputs: [tool: 'ant', ...])
 ```
+
+输入名不变（`goals` / `options` / `home` / `failOnError`）。本仓库只读保留，便于历史构建追溯。
